@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Todo List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 My Todos</h1>
+            <p>Welcome, <strong>{{ username }}</strong></p>
+            <a href="/logout" class="btn btn-secondary">Logout</a>
+        </div>
+
+        <div class="form-section">
+            <h2>Add New Todo</h2>
+            <form method="POST" action="/add_todo">
+                <div class="form-group">
+                    <input type="text" name="title" placeholder="Enter a new todo..." required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Todo</button>
+            </form>
+        </div>
+
+        <div class="todos-section">
+            <h2>Your Todos</h2>
+            {% if todos %}
+                <ul class="todo-list">
+                    {% for todo in todos %}
+                        <li class="todo-item {% if todo.completed %}completed{% endif %}">
+                            <span class="todo-text">{{ todo.title }}</span>
+                            <div class="todo-actions">
+                                <form method="POST" action="/complete_todo/{{ todo.id }}" style="display:inline;">
+                                    <button type="submit" class="btn btn-small btn-success">
+                                        {% if todo.completed %}Undo{% else %}Complete{% endif %}
+                                    </button>
+                                </form>
+                                <form method="POST" action="/delete_todo/{{ todo.id }}" style="display:inline;">
+                                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="empty-message">No todos yet. Add one above!</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
